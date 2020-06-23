@@ -1,26 +1,38 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Signup from './components/Signup'
+import { BrowserRouter as Router, Route } from "react-router-dom"
+import Login from './components/Login';
+import Nav from './components/Nav'
+import styled from 'styled-components';
+import PrivateRoute from './utils/PrivateRoute';
+import SavedPosts from './components/SavedPosts';
+import FormikAppSinglePost from "./components/SinglePost"
 
 function App() {
+  const NewPostWrapper = styled.div`display: flex;`;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Router>
+      <div className="App">
+      <Route path="/" component={Nav} />
+      <Route
+					path="/Singlepost"
+					render={() => {
+						return (
+							<NewPostWrapper>
+								<FormikAppSinglePost />
+							</NewPostWrapper>
+						);
+					}}
+				/>
+        <Route exact path="/Login" component={Login} />
+				<Route exact path="/Signup" component={Signup} />
+        <PrivateRoute exact path="/Savedposts" component={SavedPosts} />
+      </div>
+    </Router>
+  )
 }
+
+
 
 export default App;
