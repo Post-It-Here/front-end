@@ -51,7 +51,7 @@ export default function Nav() {
                 style={{ fontWeight: 700, color: "white" }}
                 className={classes.link}
               >
-                profile
+                dashboard
               </Link>
             </RouterLink>
             <RouterLink style={{ textDecoration: "none" }} to="/">

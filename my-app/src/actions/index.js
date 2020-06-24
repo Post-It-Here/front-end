@@ -45,7 +45,7 @@ export const SAVE_FAIL = "SAVE_FAIL";
 
 const BASE_URL = "https://unit-4-build.herokuapp.com/";
 const DS_API =
-  "https://post-it-here-data-api.herokuapp.com/docs";
+  "https://post-it-here-data-api.herokuapp.com/api/predict";
 
 export const login = (credentials, history) => dispatch => {
   console.log(credentials, "login users credentials");
@@ -111,6 +111,22 @@ export const savePost = (draft, recommendations, userID) => dispatch => {
       dispatch({ type: SAVE_FAIL, payload: err });
     });
 };
+
+export const evaluatePost = draft => dispatch => {
+  dispatch({ type: EVAL_START });
+  const dsDraft = { title: draft.title, post: draft.content };
+  console.log("submitting to DS API", dsDraft);
+  axios
+    .post(DS_API, dsDraft)
+    .then(res => {
+      console.log("response from DS API", res);
+      dispatch({ type: EVAL_SUCCESS, payload: res.data });
+    })
+    .catch(err => {
+      dispatch({ type: EVAL_FAIL, payload: err });
+      console.log("Evaluation error", err);
+    });
+  };
 
 export const editPost = draft => dispatch => {
   dispatch({ type: EDIT_SAVED_POST, payload: draft });

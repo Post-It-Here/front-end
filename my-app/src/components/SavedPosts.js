@@ -140,7 +140,6 @@ const SavedPosts = props => {
               <CardWrapper style={{ backgroundColor: "#E5F0F8" }}>
                 <ExpansionPanel>
                   <ExpansionPanelSummary
-                    // expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                   >

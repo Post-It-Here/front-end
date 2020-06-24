@@ -6,7 +6,9 @@ import Nav from './components/Nav'
 import styled from 'styled-components';
 import PrivateRoute from './utils/PrivateRoute';
 import SavedPosts from './components/SavedPosts';
+import FormikAppPost from './components/Post';
 import FormikAppSinglePost from "./components/SinglePost"
+import RecommendationList from './components/RecommendationList';
 
 function App() {
   const NewPostWrapper = styled.div`display: flex;`;
@@ -21,6 +23,19 @@ function App() {
 						return (
 							<NewPostWrapper>
 								<FormikAppSinglePost />
+								<RecommendationList />
+							</NewPostWrapper>
+						);
+					}}
+				/>
+        <Route
+					exact
+					path="/"
+					render={() => {
+						return (
+							<NewPostWrapper>
+								<FormikAppPost />
+								<RecommendationList />
 							</NewPostWrapper>
 						);
 					}}
