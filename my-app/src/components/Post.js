@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { withFormik, Form } from "formik";
-import { connect } from "react-redux";
-import { saveEdit, deletePost, evaluatePost } from "../actions";
-
 import { fade, makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import styled from "styled-components";
+import { connect } from "react-redux";
+import { evaluatePost, savePost } from "../actions";
 import ReactMde from "react-mde";
 import * as Showdown from "showdown";
 import "react-mde/lib/styles/css/react-mde-all.css";
@@ -24,6 +23,7 @@ const ButtonsWrapper = styled.div`
   flex-direction: row;
   justify-content: space-around;
 `;
+
 const TitleWrapper = styled.div`
   margin-left: -7px;
 `;
@@ -71,33 +71,31 @@ const converter = new Showdown.Converter({
   tasklists: true
 });
 
-const SinglePost = props => {
-  const { values, handleChange, recommendations, savedPostToEdit } = props;
-  const { title, content, id } = savedPostToEdit;
-  const [editedTitle, setEditedTitle] = useState("");
-  const [editedPost, setEditedPost] = useState("");
+const Post = props => {
+  const { values, handleChange, recommendations, userID } = props;
   const classes = useStyles();
-
-  useEffect(() => {
-    setEditedTitle(title);
-    setEditedPost(content);
-  }, [savedPostToEdit]);
+  const [value, setValue] = useState("**Write Your Post Here**");
+  const [selectedTab, setSelectedTab] = useState("write");
 
   return (
     <PostTextWrapper>
-      <h1>Single View</h1>
+      <h1>Post It Here!</h1>
       <Form>
-        <RedditTextField
-          label="Reddit Title Here"
-          name="title"
-          className={classes.margin}
-          variant="filled"
-          id="reddit-input"
-          fullWidth
-          onChange={handleChange}
-          value={values.title}
-        />{" "}
+        <TitleWrapper>
+          <RedditTextField
+            label="Reddit Title Here"
+            name="title"
+            className={classes.margin}
+            variant="filled"
+            id="reddit-input"
+            fullWidth
+            onChange={handleChange}
+            value={values.title}
+            style={{ width: "99%" }}
+          />{" "}
+        </TitleWrapper>
         <br />
+
         <RedditTextField
           label="Reddit Post Here"
           name="content"
@@ -114,20 +112,10 @@ const SinglePost = props => {
           <Button
             variant="outlined"
             className={classes.button}
-            onClick={() => {
-              props.deletePost(id);
-            }}
-          >
-            Delete
-          </Button>
-
-          <Button
-            variant="outlined"
-            className={classes.button}
             color="primary"
             type="submit"
           >
-            Resubmit For Recommendation
+            Submit For Recommendation
           </Button>
 
           <Button
@@ -135,7 +123,7 @@ const SinglePost = props => {
             className={classes.button}
             color="secondary"
             onClick={() => {
-              props.saveEdit(values, recommendations, id);
+              props.savePost(values, recommendations, userID);
             }}
           >
             Save
@@ -146,28 +134,28 @@ const SinglePost = props => {
   );
 };
 
-const FormikAppPostSingle = withFormik({
+const FormikAppPost = withFormik({
   mapPropsToValues(props) {
-    const { savedPostToEdit } = props;
+    const { title, content } = props.savedPost;
     return {
-      title: savedPostToEdit.title || "",
-      content: savedPostToEdit.content || ""
+      title: title || "",
+      content: content || ""
     };
   },
-  handleSubmit(post, { props }) {
-    props.evaluatePost(post);
+  handleSubmit(values, { props }) {
+    props.evaluatePost(values);
   }
-})(SinglePost);
+})(Post);
 
 const mapStateToProps = state => {
-  const { recommendations, savedPostToEdit } = state;
   return {
-    savedPostToEdit: state.savedPostToEdit,
-    recommendations: recommendations || []
+    savedPost: state.savedPost,
+    recommendations: state.recommendations,
+    userID: state.loggedInUser
   };
 };
 
 export default connect(
   mapStateToProps,
-  { saveEdit }
-)(FormikAppPostSingle);
+  { evaluatePost, savePost }
+)(FormikAppPost);
