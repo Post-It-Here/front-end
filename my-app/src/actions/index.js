@@ -112,30 +112,28 @@ export const savePost = (draft, recommendations, userID) => dispatch => {
     });
 };
 
-export const evaluatePost = draft => dispatch => {
-  dispatch({ type: EVAL_START });
-  const dsDraft = { title: draft.title, post: draft.content };
-  console.log("submitting to DS API", dsDraft);
-  axios
-    .post(DS_API, dsDraft)
-    .then(res => {
-      console.log("response from DS API", res);
-      dispatch({ type: EVAL_SUCCESS, payload: res.data });
-    })
-    .catch(err => {
-      dispatch({ type: EVAL_FAIL, payload: err });
-      console.log("Evaluation error", err);
-    });
-  };
+// export const evaluatePost = draft => dispatch => {
+//   dispatch({ type: EVAL_START });
+//   const dsDraft = { title: draft.title, post: draft.content };
+//   console.log("submitting to DS API", dsDraft);
+//   axios
+//     .post(DS_API, dsDraft)
+//     .then(res => {
+//       console.log("response from DS API", res);
+//       dispatch({ type: EVAL_SUCCESS, payload: res.data });
+//     })
+//     .catch(err => {
+//       dispatch({ type: EVAL_FAIL, payload: err });
+//       console.log("Evaluation error", err);
+//     });
+//   };
 
-export const editPost = draft => dispatch => {
-  dispatch({ type: EDIT_SAVED_POST, payload: draft });
-};
+// export const editPost = draft => dispatch => {
+//   dispatch({ type: EDIT_SAVED_POST, payload: draft });
+// };
 
 export const saveEdit = (draft, recommendations, id) => dispatch => {
   console.log("this is the draft", draft);
   console.log("these are the recommenations", recommendations);
   console.log("this is the id", id);
 };
-
-//webpack
